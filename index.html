@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>💕 Will you be my Valentine ? 💕</title>
+    <title>💕 Will you be my Valentine? 💕</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Caveat:wght@700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -23,7 +23,7 @@
             position: relative;
         }
 
-        
+        /* Floating hearts background */
         .heart-bg {
             position: absolute;
             width: 100%;
@@ -151,7 +151,7 @@
             transform: translateX(-50%);
         }
 
-        
+        /* Decorative hearts around face */
         .deco-heart {
             position: absolute;
             font-size: 24px;
@@ -197,7 +197,9 @@
             display: flex;
             gap: 20px;
             justify-content: center;
+            align-items: center;
             margin-top: 30px;
+            flex-wrap: wrap;
         }
 
         button {
@@ -208,7 +210,7 @@
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             position: relative;
         }
@@ -219,21 +221,27 @@
         }
 
         .yes-btn:hover {
-            transform: scale(1.1);
             box-shadow: 0 6px 25px rgba(82, 194, 52, 0.4);
+        }
+
+        .yes-btn:active {
+            transform: scale(0.95);
         }
 
         .no-btn {
             background: linear-gradient(135deg, #dc3545 0%, #e74c3c 100%);
             color: white;
-            transition: all 0.2s ease;
         }
 
         .no-btn:hover {
+            transform: scale(0.95);
+        }
+
+        .no-btn:active {
             transform: scale(0.9);
         }
 
-        
+        /* Success message */
         .success-message {
             display: none;
             animation: zoomIn 0.5s;
@@ -267,22 +275,91 @@
             margin: 20px 0;
         }
 
-        
-        .sad-message {
-            display: none;
-            animation: zoomIn 0.5s;
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 40px 30px;
+                margin: 20px;
+                max-width: 90%;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+
+            .cute-face {
+                width: 120px;
+                height: 120px;
+            }
+
+            .eyes {
+                top: 40px;
+                gap: 28px;
+            }
+
+            .mouth {
+                bottom: 28px;
+            }
+
+            button {
+                font-size: 18px;
+                padding: 12px 30px;
+            }
+
+            .buttons {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .success-message h2 {
+                font-size: 36px;
+            }
+
+            .success-message p {
+                font-size: 20px;
+            }
         }
 
-        .sad-message h2 {
-            font-family: 'Caveat', cursive;
-            font-size: 36px;
-            color: #666;
-            margin-bottom: 20px;
-        }
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 20px;
+            }
 
-        .sad-face {
-            font-size: 80px;
-            margin: 20px 0;
+            h1 {
+                font-size: 28px;
+            }
+
+            .cute-face {
+                width: 100px;
+                height: 100px;
+            }
+
+            .eyes {
+                top: 35px;
+                gap: 25px;
+            }
+
+            .eye {
+                width: 10px;
+                height: 10px;
+            }
+
+            .blush {
+                width: 25px;
+                height: 18px;
+            }
+
+            .mouth {
+                width: 35px;
+                height: 20px;
+                bottom: 25px;
+            }
+
+            button {
+                font-size: 16px;
+                padding: 10px 25px;
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -313,7 +390,7 @@
             <h1>Will you be my Valentine? 💝</h1>
             
             <div class="buttons">
-                <button class="yes-btn" onclick="sayYes()">Yes 💕</button>
+                <button class="yes-btn" id="yesBtn" onclick="sayYes()">Yes 💕</button>
                 <button class="no-btn" id="noBtn" onclick="sayNo()">No</button>
             </div>
         </div>
@@ -322,18 +399,12 @@
             <div class="celebration">🎉💕🎊</div>
             <h2>Yaaay! 😍</h2>
             <p>You made me the happiest! 💖</p>
-            <p style="margin-top: 15px; font-size: 18px;"> 🥰</p>
-        </div>
-
-        <div class="sad-message" id="sadMessage">
-            <div class="sad-face">😢💔</div>
-            <h2>Maybe next time... 😔</h2>
-            <p style="font-size: 18px; color: #999;">💔</p>
+            <p style="margin-top: 15px; font-size: 18px;">لقد جعلتني أسعد شخص في العالم! 🥰</p>
         </div>
     </div>
 
     <script>
-        
+        // Create floating hearts background
         const heartBg = document.getElementById('heartBg');
         const hearts = ['💕', '💖', '💗', '💓', '💝'];
         
@@ -351,22 +422,24 @@
             }, 15000);
         }
 
-        
+        // Create initial hearts
         for (let i = 0; i < 15; i++) {
             setTimeout(createFloatingHeart, i * 500);
         }
 
-        
+        // Keep creating hearts
         setInterval(createFloatingHeart, 1000);
 
         let noClickCount = 0;
         const noBtn = document.getElementById('noBtn');
+        const yesBtn = document.getElementById('yesBtn');
+        let yesBtnScale = 1;
 
         function sayYes() {
             document.getElementById('questionScreen').style.display = 'none';
             document.getElementById('successMessage').style.display = 'block';
             
-            
+            // Create celebration hearts
             for (let i = 0; i < 30; i++) {
                 setTimeout(() => {
                     const heart = document.createElement('div');
@@ -387,64 +460,46 @@
         function sayNo() {
             noClickCount++;
             
-            if (noClickCount === 1) {
-                noBtn.textContent = 'Are you sure? 🥺';
-                noBtn.style.transform = 'scale(0.95)';
-            } else if (noClickCount === 2) {
-                noBtn.textContent = 'Please? 🥹';
-                noBtn.style.transform = 'scale(0.9)';
-            } else if (noClickCount === 3) {
-                noBtn.textContent = 'Think again... 💔';
-                noBtn.style.transform = 'scale(0.85)';
-                noBtn.style.fontSize = '18px';
-            } else if (noClickCount === 4) {
-                noBtn.textContent = 'Last chance! 😢';
-                noBtn.style.transform = 'scale(0.8)';
-                noBtn.style.fontSize = '16px';
-            } else {
-                
-                const container = document.querySelector('.container');
-                const containerRect = container.getBoundingClientRect();
-                const btnRect = noBtn.getBoundingClientRect();
-                
-                const maxX = containerRect.width - btnRect.width - 40;
-                const maxY = containerRect.height - btnRect.height - 40;
-                
-                const randomX = Math.random() * maxX;
-                const randomY = Math.random() * maxY;
-                
-                noBtn.style.position = 'absolute';
-                noBtn.style.left = randomX + 'px';
-                noBtn.style.top = randomY + 'px';
-                noBtn.style.transform = 'scale(0.75)';
-                noBtn.textContent = 'No! 😭';
-                
-                
-                if (noClickCount >= 8) {
-                    document.getElementById('questionScreen').style.display = 'none';
-                    document.getElementById('sadMessage').style.display = 'block';
-                }
+            // Make Yes button BIGGER each time No is clicked
+            yesBtnScale += 0.3;
+            yesBtn.style.transform = `scale(${yesBtnScale})`;
+            yesBtn.style.zIndex = '10';
+            
+            // Shrink No button
+            const noScale = Math.max(0.3, 1 - (noClickCount * 0.12));
+            noBtn.style.transform = `scale(${noScale})`;
+            
+            // Change No button text based on clicks
+            const messages = [
+                'Are you sure? 🥺',
+                'Think again! 🥹',
+                'Really? 💔',
+                'Please! 😢',
+                'Nooo! 😭',
+                'Last chance! 💔',
+                '😢',
+                '😭'
+            ];
+            
+            if (noClickCount <= messages.length) {
+                noBtn.textContent = messages[noClickCount - 1];
+            }
+            
+            // Make No button smaller font
+            const fontSize = Math.max(10, 20 - (noClickCount * 1.5));
+            noBtn.style.fontSize = fontSize + 'px';
+            
+            // After many clicks, make No button disappear and only Yes remains
+            if (noClickCount >= 6) {
+                noBtn.style.opacity = Math.max(0.2, 1 - (noClickCount * 0.12));
+            }
+            
+            // After 8 clicks, disable No button completely
+            if (noClickCount >= 8) {
+                noBtn.style.display = 'none';
+                noBtn.style.pointerEvents = 'none';
             }
         }
-
-        
-        noBtn.addEventListener('mouseenter', function() {
-            if (noClickCount >= 3) {
-                const container = document.querySelector('.container');
-                const containerRect = container.getBoundingClientRect();
-                const btnRect = noBtn.getBoundingClientRect();
-                
-                const maxX = containerRect.width - btnRect.width - 40;
-                const maxY = containerRect.height - btnRect.height - 40;
-                
-                const randomX = Math.random() * maxX;
-                const randomY = Math.random() * maxY;
-                
-                noBtn.style.position = 'absolute';
-                noBtn.style.left = randomX + 'px';
-                noBtn.style.top = randomY + 'px';
-            }
-        });
     </script>
 </body>
 </html>
